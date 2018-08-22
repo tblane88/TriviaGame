@@ -19,3 +19,45 @@ p {
     text-align: center;
     font-size: 24px;
 }
+#answerOne:hover {
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24),0 17px 50px 0 rgba(0,0,0,0.19);
+
+}
+#answerTwo:hover {
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24),0 17px 50px 0 rgba(0,0,0,0.19);
+
+}
+#answerThree:hover {
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24),0 17px 50px 0 rgba(0,0,0,0.19);
+
+}
+#answerFour:hover {
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24),0 17px 50px 0 rgba(0,0,0,0.19);
+
+}
+#answerOne {
+    border-style: ridge;
+    text-align: center;
+
+}
+#answerTwo {
+    border-style: ridge;
+    text-align: center;
+
+}
+#answerThree {
+    border-style: ridge;
+    text-align: center;
+
+}
+#answerFour {
+    border-style: ridge;
+    text-align: center;
+
+}
+.clickedWrong {
+    background-color: red;
+}
+.clickedCorrect {
+    background-color: green;
+}
