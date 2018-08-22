@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Page Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- jquery and javascript links -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="assets/javascript/app.js"></script>
+    <!-- reset stylesheet -->
+    <link rel="stylesheet" href="assets/css/reset.css">
+    <!-- bootstrap -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <!-- local stylesheet -->
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Title -->
+        <div class="row">
+            <div class="col-md-12">
+                <h1>Trivia Game!!</h1>
+            </div>
+        </div>
+        
+        <!-- Start Button Place -->
+        <div class="row">
+            <div class="col-md-12 text-center" id="start">
+                <button type="button" id="startButton">Start Game</button>
+                <p class="hidden" id="questionArea"></p>
+            </div>
+        </div>
+
+        <!-- Answer area -->
+        <div class="row">
+            <div class="col-md-6 hidden">
+                <p id="answerOne"></p>
+            </div>
+            <div class="col-md-6 hidden">
+                <p id="answerTwo"></p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 hidden">
+                <p id="answerThree"></p>
+            </div>
+            <div class="col-md-6 hidden">
+                <p id="answerFour"></p>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>
