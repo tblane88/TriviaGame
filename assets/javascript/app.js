@@ -1,5 +1,7 @@
 $(document).ready(function(){
-
+    // global variable to help in the for loop
+var i = 0;
+var g = 0;
 var choices = [{
                 question: "In 'The Alliance' episode, Michael is asked by Oscar to donate to his nephew's walkathon for a charity. How much money does Michael donate, not realizing that the donation is per mile and not a flat amount?",
                 answerArray: [
@@ -219,6 +221,34 @@ var choices = [{
                 ] 
 
                 }];
+
+var clicked = false;
+var timer = 30;
+var intervalId;
+var delay;
+
+
+                function run() {
+                    if(!intervalId) {
+                        intervalId = setInterval(decrement, 1000);
+                    }
+                };
+
+                function decrement() {
+                    timer--;
+
+                    $("#timerArea").html("<p>Timer: " + timer + "</p>");
+
+                    if (timer === 0) {
+                        stop();
+                    }
+                }
+                function stop() {
+                    clearInterval(intervalId);
+                    intervalId = null;
+                    timer = 30;
+                }
+
                 function shuffle(array) {
                     var currentIndex = array.length, temporaryValue, randomIndex;
                   
@@ -242,7 +272,7 @@ var choices = [{
 
             // Onclick function to start the game
             $("#startButton").on("click", function() {
-                choices = shuffle(choices);
+                
                 $("#startButton").addClass("hidden");
 
                 $("#answerOne").removeClass("hidden");
@@ -250,57 +280,140 @@ var choices = [{
                 $("#answerThree").removeClass("hidden");
                 $("#answerFour").removeClass("hidden");
 
-                $("#questionArea").text(choices[0].question);
-                $("#answerOne").text(choices[0].answerArray[3].answer);
-                $("#answerTwo").text(choices[0].answerArray[1].answer);
-                $("#answerThree").text(choices[0].answerArray[0].answer);
-                $("#answerFour").text(choices[0].answerArray[2].answer);
-
-
-
+                choices = shuffle(choices);
+                newQuestion();
 
             });
 
-            $("#answerOne").on("click", function() {
-                if(choices[0].answerArray[3].correct) {
-                    $("#answerOne").addClass("clickedCorrect");
+                // startGame();
+            function newQuestion() {
 
-                }else {
-                    $("#answerOne").addClass("clickedWrong");
+                        run();
+                        clicked = false;
+                        g = i;
+                        // shuffles the answers
+                        choices[i].answerArray = shuffle(choices[i].answerArray);
 
-                }
-            });
+                        $("#answerOne").removeClass("clickedCorrect clickedWrong");
+                        $("#answerTwo").removeClass("clickedCorrect clickedWrong");
+                        $("#answerThree").removeClass("clickedCorrect clickedWrong");
+                        $("#answerFour").removeClass("clickedCorrect clickedWrong");
 
-            $("#answerTwo").on("click", function() {
-                if(choices[0].answerArray[1].correct) {
-                    $("#answerTwo").addClass("clickedCorrect");
 
-                }else {
-                    $("#answerTwo").addClass("clickedWrong");
+                        $("#questionArea").text(choices[i].question);
+                        $("#answerOne").text(choices[i].answerArray[0].answer);
+                        $("#answerTwo").text(choices[i].answerArray[1].answer);
+                        $("#answerThree").text(choices[i].answerArray[2].answer);
+                        $("#answerFour").text(choices[i].answerArray[3].answer);
 
-                }
-            });
+                        
 
-            $("#answerThree").on("click", function() {
-                if(choices[0].answerArray[0].correct) {
-                    $("#answerThree").addClass("clickedCorrect");
+            }
+                        
 
-                }else {
-                    $("#answerThree").addClass("clickedWrong");
 
-                }
-            });
+                        $("#answerOne").on("click", function() {
+                            if (!clicked) {
+                                    clicked = true;
+                                    if(choices[g].answerArray[0].correct) {
+                                        $("#answerOne").addClass("clickedCorrect");
+                                        $("#correctIncorrect").html("<p>You have picked the correct answer!</p>");
+                                        stop();
+                                        i++;
+                                        setTimeout(newQuestion, 1000 * 5);
+                    
+                                    }else {
+                                        $("#answerOne").addClass("clickedWrong");
+                                        $("#correctIncorrect").html("<p>You have picked the wrong answer!</p>");
+                                        stop();
+                                        i++;
+                                        setTimeout(newQuestion, 1000 * 5);
+                                       
 
-            $("#answerFour").on("click", function() {
-                if(choices[0].answerArray[2].correct) {
-                    $("#answerFour").addClass("clickedCorrect");
+                    
+                                    }
+                        }
+                        });
+            
+                        $("#answerTwo").on("click", function() {
+                            if (!clicked) {
+                                clicked = true;
+                                if(choices[g].answerArray[1].correct) {
+                                    $("#answerTwo").addClass("clickedCorrect");
+                                    $("#correctIncorrect").html("<p>You have picked the correct answer!</p>");
+                                    stop();
+                                    i++
+                                    setTimeout(newQuestion, 1000 * 5);
+                                   
+                
+                                }else {
+                                    $("#answerTwo").addClass("clickedWrong");
+                                    $("#correctIncorrect").html("<p>You have picked the wrong answer!</p>");
+                                    stop();
+                                    i++;
+                                    setTimeout(newQuestion, 1000 * 5);
+                                   
+                
+                                }
+                        }
+                        });
+            
+                        $("#answerThree").on("click", function() {
+                            if (!clicked) {
+                                    clicked = true;
+                                    if(choices[g].answerArray[2].correct) {
+                                        $("#answerThree").addClass("clickedCorrect");
+                                        $("#correctIncorrect").html("<p>You have picked the correct answer!</p>");
+                                        stop();
+                                        i++
+                                        setTimeout(newQuestion, 1000 * 5);
+                                       
+                                        
+                    
+                                    }else {
+                                        $("#answerThree").addClass("clickedWrong");
+                                        $("#correctIncorrect").html("<p>You have picked the wrong answer!</p>");
+                                        stop();
+                                        i++
+                                        setTimeout(newQuestion, 1000 * 5);
+                                       
+                                       
 
-                }else {
-                    $("#answerFour").addClass("clickedWrong");
+                    
+                                    }
+                        }
+                        });
+            
+                        $("#answerFour").on("click", function() {
+                            if (!clicked) {
+                                    clicked = true;
+                                    if(choices[g].answerArray[3].correct) {
+                                        $("#answerFour").addClass("clickedCorrect");
+                                        $("#correctIncorrect").html("<p>You have picked the correct answer!</p>");
+                                        stop();
+                                        i++;
+                                        setTimeout(newQuestion, 1000 * 5);
+                                       
 
-                }
-            });
+                    
+                                    }else {
+                                        $("#answerFour").addClass("clickedWrong");
+                                        $("#correctIncorrect").html("<p>You have picked the wrong answer!</p>");
+                                        stop();
+                                        i++;
+                                        setTimeout(newQuestion, 1000 * 5);
+                                       
+                    
+                                    }
+                        }
+                        });
+            
+                    
 
+
+           
+
+            
 
 
 });
