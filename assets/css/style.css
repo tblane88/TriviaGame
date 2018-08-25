@@ -61,3 +61,6 @@ p {
 .clickedCorrect {
     background-color: green;
 }
+img {
+    text-align: center;
+}

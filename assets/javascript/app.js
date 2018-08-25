@@ -21,7 +21,8 @@ var choices = [{
                             answer: "$40.00",
                             correct: false
                         }
-                ] 
+                ],
+                gifURL: "https://media.giphy.com/media/yidUzriaAGJbsxt58k/giphy.gif" 
                 
                },
                {
@@ -43,7 +44,8 @@ var choices = [{
                             answer: "Jason",
                             correct: false
                         }
-                ]
+                ],
+                gifURL: "https://media.giphy.com/media/5wWf7H89PisM6An8UAU/giphy.gif"
                 }, 
                 {
                 question: "Which television series revolves around a concierge doctor making house calls in the Hampstons?",
@@ -64,7 +66,8 @@ var choices = [{
                             answer: "Scrubs",
                             correct: false
                         }
-                ] 
+                ],
+                gifURL: "https://media.giphy.com/media/1kHmApoKwc3Dy/giphy.gif" 
 
                 },   
                 {
@@ -86,7 +89,8 @@ var choices = [{
                             answer: "Ed O'Neil",
                             correct: false
                         }
-                ] 
+                ],
+                gifURL: "https://media.giphy.com/media/S2u9Ldmx480O4/giphy.gif" 
                
                 },
                 {
@@ -108,7 +112,8 @@ var choices = [{
                             answer: "Labrador retreiver",
                             correct: false
                         }
-                ] 
+                ],
+                gifURL: "https://media.giphy.com/media/8Pd4vvz00KoZa/giphy.gif"
 
                 },
                 {
@@ -130,7 +135,8 @@ var choices = [{
                             answer: "Gellar",
                             correct: false
                         }
-                ] 
+                ],
+                gifURL: "https://media.giphy.com/media/3o7qDQ4kcSD1PLM3BK/giphy.gif" 
 
                 },     
                 {
@@ -152,7 +158,8 @@ var choices = [{
                             answer: "New York General",
                             correct: false
                         }
-                ] 
+                ],
+                gifURL: "https://media.giphy.com/media/DaumwpP89kQNy/giphy.gif" 
 
                 }, 
                 {
@@ -174,7 +181,8 @@ var choices = [{
                             answer: "Cobblepot and Oswald",
                             correct: false
                         }
-                ] 
+                ],
+                gifURL: "https://media.giphy.com/media/zhJ55GsXRajxm/giphy.gif" 
 
                 },
                 {
@@ -196,7 +204,8 @@ var choices = [{
                             answer: "Preston",
                             correct: false
                         }
-                ] 
+                ],
+                gifURL: "https://media.giphy.com/media/r1jbtDXIAjq92/giphy.gif" 
 
                 },  
                 {
@@ -218,14 +227,18 @@ var choices = [{
                             answer: "Dustin and Dart",
                             correct: false
                         }
-                ] 
+                ],
+                gifURL: "https://media.giphy.com/media/3orieUk41XeN25W1qM/giphy.gif" 
 
                 }];
 
 var clicked = false;
-var timer = 30;
+var timer = 31;
 var intervalId;
 var delay;
+var questionCount;;
+var correctCount; 
+var incorrectCount;
 
 
                 function run() {
@@ -240,14 +253,17 @@ var delay;
                     $("#timerArea").html("<p>Timer: " + timer + "</p>");
 
                     if (timer === 0) {
+                        i++;
                         stop();
+                        newQuestion();
                     }
                 }
                 function stop() {
                     clearInterval(intervalId);
                     intervalId = null;
-                    timer = 30;
+                    timer = 31;
                 }
+
 
                 function shuffle(array) {
                     var currentIndex = array.length, temporaryValue, randomIndex;
@@ -267,11 +283,15 @@ var delay;
                   
                     return array;
                   }
-                  
+                  function addGIF() {
+                      var image = $("<img>").attr("src", choices[i].gifURL);
+
+                      $("#correctIncorrect").append(image);
+                  }
 
 
-            // Onclick function to start the game
-            $("#startButton").on("click", function() {
+            // Function to start the game
+            function startGame() {
                 
                 $("#startButton").addClass("hidden");
 
@@ -280,32 +300,50 @@ var delay;
                 $("#answerThree").removeClass("hidden");
                 $("#answerFour").removeClass("hidden");
 
+                questionCount = 0;
+                correctCount = 0;
+                incorrectCount = 0;
+
+                
                 choices = shuffle(choices);
                 newQuestion();
 
-            });
+            };
 
-                // startGame();
+                
             function newQuestion() {
+                        if(questionCount !== choices.length) {
+                                $("#correctIncorrect").empty();
+                                run();
+                                clicked = false;
+                                g = i;
+                                // shuffles the answers
+                                choices[i].answerArray = shuffle(choices[i].answerArray);
 
-                        run();
-                        clicked = false;
-                        g = i;
-                        // shuffles the answers
-                        choices[i].answerArray = shuffle(choices[i].answerArray);
-
-                        $("#answerOne").removeClass("clickedCorrect clickedWrong");
-                        $("#answerTwo").removeClass("clickedCorrect clickedWrong");
-                        $("#answerThree").removeClass("clickedCorrect clickedWrong");
-                        $("#answerFour").removeClass("clickedCorrect clickedWrong");
+                                $("#answerOne").removeClass("clickedCorrect clickedWrong");
+                                $("#answerTwo").removeClass("clickedCorrect clickedWrong");
+                                $("#answerThree").removeClass("clickedCorrect clickedWrong");
+                                $("#answerFour").removeClass("clickedCorrect clickedWrong");
 
 
-                        $("#questionArea").text(choices[i].question);
-                        $("#answerOne").text(choices[i].answerArray[0].answer);
-                        $("#answerTwo").text(choices[i].answerArray[1].answer);
-                        $("#answerThree").text(choices[i].answerArray[2].answer);
-                        $("#answerFour").text(choices[i].answerArray[3].answer);
+                                $("#questionArea").text(choices[i].question);
+                                $("#answerOne").text(choices[i].answerArray[0].answer);
+                                $("#answerTwo").text(choices[i].answerArray[1].answer);
+                                $("#answerThree").text(choices[i].answerArray[2].answer);
+                                $("#answerFour").text(choices[i].answerArray[3].answer);
 
+                                questionCount++;
+                        }else {
+                                $("#correctIncorrect").empty();
+                                $("#questionArea").empty();
+                                $("#answerOne").empty();
+                                $("#answerTwo").empty();
+                                $("#answerThree").empty();
+                                $("#answerFour").empty();
+
+                                 
+
+                        }
                         
 
             }
@@ -318,6 +356,7 @@ var delay;
                                     if(choices[g].answerArray[0].correct) {
                                         $("#answerOne").addClass("clickedCorrect");
                                         $("#correctIncorrect").html("<p>You have picked the correct answer!</p>");
+                                        addGIF();
                                         stop();
                                         i++;
                                         setTimeout(newQuestion, 1000 * 5);
@@ -326,6 +365,7 @@ var delay;
                                         $("#answerOne").addClass("clickedWrong");
                                         $("#correctIncorrect").html("<p>You have picked the wrong answer!</p>");
                                         stop();
+                                        addGIF();
                                         i++;
                                         setTimeout(newQuestion, 1000 * 5);
                                        
@@ -341,6 +381,7 @@ var delay;
                                 if(choices[g].answerArray[1].correct) {
                                     $("#answerTwo").addClass("clickedCorrect");
                                     $("#correctIncorrect").html("<p>You have picked the correct answer!</p>");
+                                    addGIF();
                                     stop();
                                     i++
                                     setTimeout(newQuestion, 1000 * 5);
@@ -349,6 +390,7 @@ var delay;
                                 }else {
                                     $("#answerTwo").addClass("clickedWrong");
                                     $("#correctIncorrect").html("<p>You have picked the wrong answer!</p>");
+                                    addGIF();
                                     stop();
                                     i++;
                                     setTimeout(newQuestion, 1000 * 5);
@@ -364,6 +406,7 @@ var delay;
                                     if(choices[g].answerArray[2].correct) {
                                         $("#answerThree").addClass("clickedCorrect");
                                         $("#correctIncorrect").html("<p>You have picked the correct answer!</p>");
+                                        addGIF();
                                         stop();
                                         i++
                                         setTimeout(newQuestion, 1000 * 5);
@@ -373,6 +416,7 @@ var delay;
                                     }else {
                                         $("#answerThree").addClass("clickedWrong");
                                         $("#correctIncorrect").html("<p>You have picked the wrong answer!</p>");
+                                        addGIF();
                                         stop();
                                         i++
                                         setTimeout(newQuestion, 1000 * 5);
@@ -390,6 +434,7 @@ var delay;
                                     if(choices[g].answerArray[3].correct) {
                                         $("#answerFour").addClass("clickedCorrect");
                                         $("#correctIncorrect").html("<p>You have picked the correct answer!</p>");
+                                        addGIF();
                                         stop();
                                         i++;
                                         setTimeout(newQuestion, 1000 * 5);
@@ -399,6 +444,7 @@ var delay;
                                     }else {
                                         $("#answerFour").addClass("clickedWrong");
                                         $("#correctIncorrect").html("<p>You have picked the wrong answer!</p>");
+                                        addGIF();
                                         stop();
                                         i++;
                                         setTimeout(newQuestion, 1000 * 5);
