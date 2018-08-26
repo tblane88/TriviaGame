@@ -1,7 +1,16 @@
 $(document).ready(function(){
-    // global variable to help in the for loop
+    // global variables for the game
 var i = 0;
 var g = 0;
+var clicked = false;
+var timer = 15;
+var intervalId;
+var questionCount;;
+var correctCount; 
+var incorrectCount;
+
+
+// questions array
 var choices = [{
                 question: "In 'The Alliance' episode, Michael is asked by Oscar to donate to his nephew's walkathon for a charity. How much money does Michael donate, not realizing that the donation is per mile and not a flat amount?",
                 answerArray: [
@@ -22,7 +31,8 @@ var choices = [{
                             correct: false
                         }
                 ],
-                gifURL: "https://media.giphy.com/media/yidUzriaAGJbsxt58k/giphy.gif" 
+                gifURL: "https://media.giphy.com/media/yidUzriaAGJbsxt58k/200w_d.gif" ,
+                wrongURL: "https://media.giphy.com/media/14akZTBhO7rW00/200w_d.gif"
                 
                },
                {
@@ -45,7 +55,8 @@ var choices = [{
                             correct: false
                         }
                 ],
-                gifURL: "https://media.giphy.com/media/5wWf7H89PisM6An8UAU/giphy.gif"
+                gifURL: "https://media.giphy.com/media/5wWf7H89PisM6An8UAU/200w_d.gif",
+                wrongURL: "https://media.giphy.com/media/guMTWyRGp9Qg8/200w_d.gif"
                 }, 
                 {
                 question: "Which television series revolves around a concierge doctor making house calls in the Hampstons?",
@@ -67,7 +78,8 @@ var choices = [{
                             correct: false
                         }
                 ],
-                gifURL: "https://media.giphy.com/media/1kHmApoKwc3Dy/giphy.gif" 
+                gifURL: "https://media.giphy.com/media/1kHmApoKwc3Dy/200w_d.gif",
+                wrongURL:"https://media.giphy.com/media/sgfauo9CqBcAw/200w_d.gif" 
 
                 },   
                 {
@@ -90,7 +102,8 @@ var choices = [{
                             correct: false
                         }
                 ],
-                gifURL: "https://media.giphy.com/media/S2u9Ldmx480O4/giphy.gif" 
+                gifURL: "https://media.giphy.com/media/S2u9Ldmx480O4/giphy-downsized.gif", 
+                wrongURL: "https://media.giphy.com/media/jkojXEIwuqp6o/giphy-downsized.gif"
                
                 },
                 {
@@ -113,7 +126,8 @@ var choices = [{
                             correct: false
                         }
                 ],
-                gifURL: "https://media.giphy.com/media/8Pd4vvz00KoZa/giphy.gif"
+                gifURL: "https://media.giphy.com/media/8Pd4vvz00KoZa/200w_d.gif",
+                wrongURL: "https://media.giphy.com/media/ZsjU4Mk3SiwFy/giphy.gif"
 
                 },
                 {
@@ -136,7 +150,8 @@ var choices = [{
                             correct: false
                         }
                 ],
-                gifURL: "https://media.giphy.com/media/3o7qDQ4kcSD1PLM3BK/giphy.gif" 
+                gifURL: "https://media.giphy.com/media/3o7qDQ4kcSD1PLM3BK/200w_d.gif", 
+                wrongURL: "https://media.giphy.com/media/gJEWhG3f3zszu/200w_d.gif"
 
                 },     
                 {
@@ -159,7 +174,8 @@ var choices = [{
                             correct: false
                         }
                 ],
-                gifURL: "https://media.giphy.com/media/DaumwpP89kQNy/giphy.gif" 
+                gifURL: "https://media.giphy.com/media/12CjZCj2dqlm1i/giphy-downsized.gif",
+                wrongURL: "https://media.giphy.com/media/605XNIvvwTaMg/200w_d.gif" 
 
                 }, 
                 {
@@ -182,7 +198,8 @@ var choices = [{
                             correct: false
                         }
                 ],
-                gifURL: "https://media.giphy.com/media/zhJ55GsXRajxm/giphy.gif" 
+                gifURL: "https://media.giphy.com/media/zhJ55GsXRajxm/200w_d.gif",
+                wrongURL: "https://media.giphy.com/media/10ABjDisnpRuXS/200w_d.gif" 
 
                 },
                 {
@@ -205,7 +222,8 @@ var choices = [{
                             correct: false
                         }
                 ],
-                gifURL: "https://media.giphy.com/media/r1jbtDXIAjq92/giphy.gif" 
+                gifURL: "https://media.giphy.com/media/r1jbtDXIAjq92/200w_d.gif", 
+                wrongURL: "https://media.giphy.com/media/fx04oRcbbVLC8/200w_d.gif"
 
                 },  
                 {
@@ -228,43 +246,294 @@ var choices = [{
                             correct: false
                         }
                 ],
-                gifURL: "https://media.giphy.com/media/3orieUk41XeN25W1qM/giphy.gif" 
+                gifURL: "https://media.giphy.com/media/3orieUk41XeN25W1qM/giphy-downsized.gif",
+                wrongURL: "https://media.giphy.com/media/3ohs7KViF6rA4aan5u/200w_d.gif" 
+
+                },
+                {
+                question: "On the tv show Modern Family which one of these aliases does Phil Dunphy use?",
+                answerArray: [
+                        {
+                            answer: "Clive Bixby",
+                            correct: true
+                        },
+                        {
+                            answer: "Reginald Featherbottom",
+                            correct: false
+                        },
+                        {
+                            answer: "Sideshow Bob",
+                            correct: false
+                        },
+                        {
+                            answer: "Prison Mike",
+                            correct: false
+                        }
+                ],
+                gifURL: "https://media.giphy.com/media/H5v1ojOtgDZVm/giphy-downsized.gif", 
+                wrongURL: "https://media.giphy.com/media/3ohhwG5oszITo9edJ6/giphy-downsized.gif"
+
+                },
+                {
+                question: "What does Dean call his car on the tv show Supernatural?",
+                answerArray: [
+                        {
+                            answer: "Baby",
+                            correct: true
+                        },
+                        {
+                            answer: "POS",
+                            correct: false
+                        },
+                        {
+                            answer: "HellCat",
+                            correct: false
+                        },
+                        {
+                            answer: "Sweet Thang",
+                            correct: false
+                        }
+                ],
+                gifURL: "https://media.giphy.com/media/tsXtdAtf3cHO8/giphy-downsized.gif", 
+                wrongURL: "https://media.giphy.com/media/kpr62uiaUKQk8/giphy-downsized.gif"
+
+                },
+                {
+                question: "On the show Parks and Rec what is Andy Dwyers made up FBI name?",
+                answerArray: [
+                        {
+                            answer: "Burt Macklin",
+                            correct: true
+                        },
+                        {
+                            answer: "Inspector Gadget",
+                            correct: false
+                        },
+                        {
+                            answer: "Phillip Morris",
+                            correct: false
+                        },
+                        {
+                            answer: "Doc Holiday",
+                            correct: false
+                        }
+                ],
+                gifURL: "https://media.giphy.com/media/C7rDCSz3iC1Us/giphy-downsized.gif", 
+                wrongURL: "https://media.giphy.com/media/xTiTnzvzlEj5vD3Tkk/giphy-downsized.gif"
+
+                },
+                {
+                question: "Where does the TV show Psych take place?",
+                answerArray: [
+                        {
+                            answer: "Santa Barbara",
+                            correct: true
+                        },
+                        {
+                            answer: "Miami",
+                            correct: false
+                        },
+                        {
+                            answer: "Dallas",
+                            correct: false
+                        },
+                        {
+                            answer: "Portland",
+                            correct: false
+                        }
+                ],
+                gifURL: "https://media.giphy.com/media/nxM7IbxDeTRxC/giphy-downsized.gif", 
+                wrongURL: "https://media.giphy.com/media/2r1nnlUarj1vy/giphy-downsized.gif"
+
+                }, 
+                {
+                question: "Finish the name of this TV show: _____ Notice",
+                answerArray: [
+                        {
+                            answer: "Burn",
+                            correct: true
+                        },
+                        {
+                            answer: "Last",
+                            correct: false
+                        },
+                        {
+                            answer: "Some",
+                            correct: false
+                        },
+                        {
+                            answer: "Don't",
+                            correct: false
+                        }
+                ],
+                gifURL: "https://media.giphy.com/media/AE46suju1qXII/giphy-downsized.gif", 
+                wrongURL: "https://media.giphy.com/media/ULSnTDIA7KkrC/giphy.gif"
+
+                },
+                {
+                question: "What is the name of the Creature on Rick and Morty whose only purpose is to help?",
+                answerArray: [
+                        {
+                            answer: "Mr.Meeseeks",
+                            correct: true
+                        },
+                        {
+                            answer: "Fremulon",
+                            correct: false
+                        },
+                        {
+                            answer: "George",
+                            correct: false
+                        },
+                        {
+                            answer: "Mr.Peabody",
+                            correct: false
+                        }
+                ],
+                gifURL: "https://media.giphy.com/media/rg4iofhciswNy/giphy-downsized.gif", 
+                wrongURL: "https://media.giphy.com/media/Mp3y4McLBLA1W/giphy-downsized.gif"
+
+                },
+                {
+                question: "What is Barney's favorite thing to do on How I Met Your Mother?",
+                answerArray: [
+                        {
+                            answer: "High Five",
+                            correct: true
+                        },
+                        {
+                            answer: "Shake Hands",
+                            correct: false
+                        },
+                        {
+                            answer: "Hide peoples phones",
+                            correct: false
+                        },
+                        {
+                            answer: "Scare people",
+                            correct: false
+                        }
+                ],
+                gifURL: "https://media.giphy.com/media/irnky0EUGEZnq/giphy-downsized.gif", 
+                wrongURL: "https://media.giphy.com/media/mvNExt19DqFJS/giphy-downsized.gif"
+    
+                },
+                {
+                question: "Who plays the page Kenneth on 30 Rock?",
+                answerArray: [
+                        {
+                            answer: "Jack McBrayer",
+                            correct: true
+                        },
+                        {
+                            answer: "James Roday",
+                            correct: false
+                        },
+                        {
+                            answer: "Tim Allen",
+                            correct: false
+                        },
+                        {
+                            answer: "Alec Baldwin",
+                            correct: false
+                        }
+                ],
+                gifURL: "https://media.giphy.com/media/ve8tTGLhXKMmc/giphy.gif", 
+                wrongURL: "https://media.giphy.com/media/hgWtlgM8K2Yhy/giphy-downsized.gif"
+
+                },
+                {
+                question: "What is Schmidt's first name on the show New Girl?",
+                answerArray: [
+                        {
+                            answer: "Winston",
+                            correct: true
+                        },
+                        {
+                            answer: "Nick",
+                            correct: false
+                        },
+                        {
+                            answer: "Hank",
+                            correct: false
+                        },
+                        {
+                            answer: "Simon",
+                            correct: false
+                        }
+                ],
+                gifURL: "https://media.giphy.com/media/H7x1H0veAJlo4/giphy-downsized.gif", 
+                wrongURL: "https://media.giphy.com/media/26uf4xAlDlfU0cvM4/giphy-downsized.gif"
+
+                },
+                {
+                question: "On the Big Bang Theory, Where is Sheldons spot?",
+                answerArray: [
+                        {
+                            answer: "the couch",
+                            correct: true
+                        },
+                        {
+                            answer: "the comic book store",
+                            correct: false
+                        },
+                        {
+                            answer: "his home in Texas",
+                            correct: false
+                        },
+                        {
+                            answer: "the bus bench",
+                            correct: false
+                        }
+                ],
+                gifURL: "https://media.giphy.com/media/f79OYWh5uwIfK/giphy-downsized.gif", 
+                wrongURL: "https://media.giphy.com/media/3o7WTNYgMUmNM9jFh6/giphy-downsized.gif"
 
                 }];
 
-var clicked = false;
-var timer = 31;
-var intervalId;
-var delay;
-var questionCount;;
-var correctCount; 
-var incorrectCount;
+
+                                // Functions Start
+// --------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
+                // timer function
                 function run() {
                     if(!intervalId) {
                         intervalId = setInterval(decrement, 1000);
                     }
                 };
 
+
+                // function to show a visual countdown for the timer
                 function decrement() {
-                    timer--;
 
                     $("#timerArea").html("<p>Timer: " + timer + "</p>");
+                    timer--;
+
 
                     if (timer === 0) {
-                        i++;
+                        clicked = true;
+                        $("#correctIncorrect").html("<p>You did not pick anything!</p>");
+                        addWrongGIF();
                         stop();
-                        newQuestion();
+                        setTimeout(newQuestion, 1000 * 5);
+                        i++;
+                        incorrectCount++;
+
+
+                        
                     }
                 }
+
+
+                // stop function for the timer
                 function stop() {
                     clearInterval(intervalId);
                     intervalId = null;
-                    timer = 31;
+                    timer = 15;
                 }
 
-
+                // function to shuffle an array
                 function shuffle(array) {
                     var currentIndex = array.length, temporaryValue, randomIndex;
                   
@@ -283,26 +552,40 @@ var incorrectCount;
                   
                     return array;
                   }
+
+
+                //   adds a gif for a correct answer
                   function addGIF() {
                       var image = $("<img>").attr("src", choices[i].gifURL);
 
                       $("#correctIncorrect").append(image);
                   }
 
+                  
+                //   adds a gif for an incorrect answer
+                  function addWrongGIF() {
+                    var image = $("<img>").attr("src", choices[i].wrongURL);
 
-            // Function to start the game
+                    $("#correctIncorrect").append(image);
+                }
+
+
+
+            // Function to start the game or restart the game
             function startGame() {
-                
+                $("#correctIncorrect").empty();
                 $("#startButton").addClass("hidden");
 
-                $("#answerOne").removeClass("hidden");
-                $("#answerTwo").removeClass("hidden");
-                $("#answerThree").removeClass("hidden");
-                $("#answerFour").removeClass("hidden");
+                $("#answerOne").removeClass("hidden clickedCorrect clickedWrong");
+                $("#answerTwo").removeClass("hidden clickedCorrect clickedWrong");
+                $("#answerThree").removeClass("hidden clickedCorrect clickedWrong");
+                $("#answerFour").removeClass("hidden clickedCorrect clickedWrong");
 
                 questionCount = 0;
                 correctCount = 0;
                 incorrectCount = 0;
+                i = 0;
+                g = 0;
 
                 
                 choices = shuffle(choices);
@@ -310,7 +593,8 @@ var incorrectCount;
 
             };
 
-                
+             
+            // function to bring in a new question it also shuffles the answers
             function newQuestion() {
                         if(questionCount !== choices.length) {
                                 $("#correctIncorrect").empty();
@@ -336,11 +620,35 @@ var incorrectCount;
                         }else {
                                 $("#correctIncorrect").empty();
                                 $("#questionArea").empty();
-                                $("#answerOne").empty();
-                                $("#answerTwo").empty();
-                                $("#answerThree").empty();
-                                $("#answerFour").empty();
+                                $("#answerOne").addClass("hidden");
+                                $("#answerTwo").addClass("hidden");
+                                $("#answerThree").addClass("hidden");
+                                $("#answerFour").addClass("hidden");
 
+                                $("#correctIncorrect").append("<p>Correct: " + correctCount + "</p>");
+                                $("#correctIncorrect").append("<p>Incorrect: " + incorrectCount + "</p");
+
+                                if(correctCount >= 19) {
+                                    $("#correctIncorrect").append("<p>Wow you watch a ton of TV!</p");
+                                    $("#correctIncorrect").append("<button id='restart'>Restart</button>");
+
+                                } else if (correctCount >= 15) {
+                                    $("#correctIncorrect").append("<p>Not too shabby</p");
+                                    $("#correctIncorrect").append("<button id='restart'>Restart</button>"); 
+                                } else if (correctCount >= 10) {
+                                    $("#correctIncorrect").append("<p>Pretty Good</p");
+                                    $("#correctIncorrect").append("<button id='restart'>Restart</button>"); 
+                                }else if (correctCount >= 5) {
+                                    $("#correctIncorrect").append("<p>You can do better!</p");
+                                    $("#correctIncorrect").append("<button id='restart'>Restart</button>"); 
+                                }else if (correctCount >=0) {
+                                    $("#correctIncorrect").append("<p>Wow you need to watch some tv!</p");
+                                    $("#correctIncorrect").append("<button id='restart'>Restart</button>"); 
+                                }
+
+                                $("#restart").on("click", function () {
+                                    startGame();
+                                });
                                  
 
                         }
@@ -348,8 +656,11 @@ var incorrectCount;
 
             }
                         
+// ----------------------------------------------------------------------------------------------------------------------------------
+                                            // End Game functions begin on click functions
 
 
+                                // on click function for the first answer
                         $("#answerOne").on("click", function() {
                             if (!clicked) {
                                     clicked = true;
@@ -358,6 +669,7 @@ var incorrectCount;
                                         $("#correctIncorrect").html("<p>You have picked the correct answer!</p>");
                                         addGIF();
                                         stop();
+                                        correctCount++;
                                         i++;
                                         setTimeout(newQuestion, 1000 * 5);
                     
@@ -365,7 +677,8 @@ var incorrectCount;
                                         $("#answerOne").addClass("clickedWrong");
                                         $("#correctIncorrect").html("<p>You have picked the wrong answer!</p>");
                                         stop();
-                                        addGIF();
+                                        addWrongGIF();
+                                        incorrectCount++;
                                         i++;
                                         setTimeout(newQuestion, 1000 * 5);
                                        
@@ -374,7 +687,9 @@ var incorrectCount;
                                     }
                         }
                         });
-            
+                        
+
+                                // on click function for the second answer
                         $("#answerTwo").on("click", function() {
                             if (!clicked) {
                                 clicked = true;
@@ -383,6 +698,7 @@ var incorrectCount;
                                     $("#correctIncorrect").html("<p>You have picked the correct answer!</p>");
                                     addGIF();
                                     stop();
+                                    correctCount++;
                                     i++
                                     setTimeout(newQuestion, 1000 * 5);
                                    
@@ -390,8 +706,9 @@ var incorrectCount;
                                 }else {
                                     $("#answerTwo").addClass("clickedWrong");
                                     $("#correctIncorrect").html("<p>You have picked the wrong answer!</p>");
-                                    addGIF();
+                                    addWrongGIF();
                                     stop();
+                                    incorrectCount++;
                                     i++;
                                     setTimeout(newQuestion, 1000 * 5);
                                    
@@ -399,7 +716,9 @@ var incorrectCount;
                                 }
                         }
                         });
-            
+                        
+
+                                // on click function for the third answer
                         $("#answerThree").on("click", function() {
                             if (!clicked) {
                                     clicked = true;
@@ -408,6 +727,7 @@ var incorrectCount;
                                         $("#correctIncorrect").html("<p>You have picked the correct answer!</p>");
                                         addGIF();
                                         stop();
+                                        correctCount++;
                                         i++
                                         setTimeout(newQuestion, 1000 * 5);
                                        
@@ -416,8 +736,9 @@ var incorrectCount;
                                     }else {
                                         $("#answerThree").addClass("clickedWrong");
                                         $("#correctIncorrect").html("<p>You have picked the wrong answer!</p>");
-                                        addGIF();
+                                        addWrongGIF();
                                         stop();
+                                        incorrectCount++;
                                         i++
                                         setTimeout(newQuestion, 1000 * 5);
                                        
@@ -427,7 +748,9 @@ var incorrectCount;
                                     }
                         }
                         });
-            
+                        
+
+                                // on click function for the fourth answer
                         $("#answerFour").on("click", function() {
                             if (!clicked) {
                                     clicked = true;
@@ -436,6 +759,7 @@ var incorrectCount;
                                         $("#correctIncorrect").html("<p>You have picked the correct answer!</p>");
                                         addGIF();
                                         stop();
+                                        correctCount++;
                                         i++;
                                         setTimeout(newQuestion, 1000 * 5);
                                        
@@ -444,20 +768,27 @@ var incorrectCount;
                                     }else {
                                         $("#answerFour").addClass("clickedWrong");
                                         $("#correctIncorrect").html("<p>You have picked the wrong answer!</p>");
-                                        addGIF();
+                                        addWrongGIF();
                                         stop();
+                                        incorrectCount++;
                                         i++;
                                         setTimeout(newQuestion, 1000 * 5);
                                        
                     
                                     }
                         }
+
                         });
-            
+                        
+                       
                     
 
+                    // call the start game at the begining start button
+                    $("#startButton").on("click", function () {
+                        startGame();
 
-           
+
+                    });
 
             
 
